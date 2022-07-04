@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_english_app/config/routes/routes.dart';
 import 'package:flutter_english_app/config/theme/app_colors.dart';
 import 'package:flutter_english_app/page/user/widgets/auth_button.dart';
 import 'package:flutter_english_app/page/user/widgets/heading_title.dart';
@@ -60,16 +61,53 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(
-                    height: 30.h,
+                    height: 40.h,
                   ),
                   const AuthButton(textButton: 'Sign in'),
                   SizedBox(
-                    height: 30.h,
+                    height: 90.h,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SocialAuthButton(),
-                      SocialAuthButton(),
+                      SocialAuthButton(
+                        child: Image.asset('assets/images/google.png'),
+                      ),
+                      SizedBox(
+                        width: 30.w,
+                      ),
+                      SocialAuthButton(
+                        child: Image.asset('assets/images/phone.png'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Dont't have an account? ",
+                        style: TextStyle(
+                          color: AppColors.hintTextColor,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.register_page);
+                        },
+                        child: Text(
+                          'Sign up',
+                          style: TextStyle(
+                            color: AppColors.primaryBuleColor,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      )
                     ],
                   )
                 ],

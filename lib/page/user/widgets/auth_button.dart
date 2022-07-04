@@ -13,7 +13,7 @@ class AuthButton extends StatelessWidget {
     Size mediaQuery = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, Routes.dictionary_page);
+        Navigator.popAndPushNamed(context, Routes.dictionary_page);
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 21.h),

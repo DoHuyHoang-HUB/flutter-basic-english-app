@@ -45,11 +45,11 @@ class _PasswordFieldInputState extends State<PasswordFieldInput> {
           suffixIcon: isPasswordVisible
               ? InkWell(
                   onTap: () => visiblePassword(),
-                  child: Image.asset('assets/images/eye-off.png'),
+                  child: Image.asset('assets/images/eye.png'),
                 )
               : InkWell(
                   onTap: () => visiblePassword(),
-                  child: Image.asset('assets/images/eye.png'),
+                  child: Image.asset('assets/images/eye-off.png'),
                 ),
           hintText: widget.hint,
           hintStyle: TextStyle(
