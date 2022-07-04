@@ -5,8 +5,8 @@ import 'package:flutter_english_app/config/routes/routes_name.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
-  // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
   runApp(const MyApp());
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
 }
 
 class MyApp extends StatelessWidget {

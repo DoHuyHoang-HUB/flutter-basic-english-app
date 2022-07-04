@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "410992872645",
+    "project_id": "dictionary-app-flutter-64e63",
+    "storage_bucket": "dictionary-app-flutter-64e63.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410992872645:android:60f31e291f33c70a89b4ac",
+        "android_client_info": {
+          "package_name": "com.example.flutter_english_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410992872645-dru0f39cfcn9c2sie1esp52156f4ho94.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSleevAE72G_yO4B7fbp-y3j5orL-_5jw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "410992872645-dru0f39cfcn9c2sie1esp52156f4ho94.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

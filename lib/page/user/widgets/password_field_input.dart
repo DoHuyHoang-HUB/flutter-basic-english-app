@@ -3,9 +3,11 @@ import 'package:flutter_english_app/config/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PasswordFieldInput extends StatefulWidget {
-  const PasswordFieldInput({Key? key, required this.hint}) : super(key: key);
+  const PasswordFieldInput({Key? key, required this.hint, this.controller})
+      : super(key: key);
 
   final String hint;
+  final TextEditingController? controller;
 
   @override
   State<PasswordFieldInput> createState() => _PasswordFieldInputState();
@@ -26,6 +28,7 @@ class _PasswordFieldInputState extends State<PasswordFieldInput> {
       child: TextFormField(
         keyboardType: TextInputType.visiblePassword,
         textInputAction: TextInputAction.done,
+        controller: widget.controller,
         validator: (value) {
           RegExp regex = RegExp(r'^.{6,}$');
           if (value!.isEmpty) {

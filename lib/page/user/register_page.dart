@@ -1,12 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_english_app/config/routes/routes.dart';
 import 'package:flutter_english_app/config/theme/app_colors.dart';
-import 'package:flutter_english_app/page/user/widgets/auth_button.dart';
 import 'package:flutter_english_app/page/user/widgets/heading_title.dart';
 import 'package:flutter_english_app/page/user/widgets/password_field_input.dart';
 import 'package:flutter_english_app/page/user/widgets/social_auth_button.dart';
 import 'package:flutter_english_app/page/user/widgets/text_field_input.dart';
+import 'package:flutter_english_app/services/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -16,6 +18,56 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  String? errorMessage;
+
+  Future<void> signUp(String email, String password) async {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      try {
+        await FirebaseAuthService.signUpWithEmailAndPassword(email, password)
+            .then((value) => {
+                  Fluttertoast.showToast(msg: "Account created successfully"),
+                  Navigator.pushReplacementNamed(
+                      context, Routes.dictionary_page),
+                });
+      } on FirebaseAuthException catch (e) {
+        switch (e.code) {
+          case "invalid-email":
+            errorMessage = "Your email address appears to be malformed.";
+            break;
+          case "wrong-password":
+            errorMessage = "Your password is wrong.";
+            break;
+          case "user-not-found":
+            errorMessage = "User with this email doesn't exist.";
+            break;
+          case "user-disabled":
+            errorMessage = "User with this email has been disabled.";
+            break;
+          case "too-many-requests":
+            errorMessage = "Too many requests";
+            break;
+          case "operation-not-allowed":
+            errorMessage = "Signing in with Email and Password is not enabled.";
+            break;
+          default:
+            errorMessage = "An undefined Error happened.";
+        }
+      }
+
+      Fluttertoast.showToast(msg: errorMessage!);
+    }
+  }
+
+  void loginWithGoogle(BuildContext context) {
+    FirebaseAuthService.signInWithGoogle().then((value) {
+      Navigator.pushNamed(context, Routes.dictionary_page);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(
                     height: 70.h,
                   ),
-                  const AuthButton(textButton: 'Sign up'),
+                  // const AuthButton(textButton: 'Sign up', authentication: ,),
                   SizedBox(
                     height: 90.h,
                   ),
@@ -58,6 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     children: [
                       SocialAuthButton(
                         child: Image.asset('assets/images/google.png'),
+                        onTap: () => loginWithGoogle(context),
                       ),
                       SizedBox(
                         width: 30.w,

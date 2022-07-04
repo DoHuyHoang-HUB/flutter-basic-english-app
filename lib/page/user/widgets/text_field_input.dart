@@ -3,11 +3,13 @@ import 'package:flutter_english_app/config/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TextFieldInput extends StatefulWidget {
-  const TextFieldInput({Key? key, required this.hint, this.prefixIcon})
+  const TextFieldInput(
+      {Key? key, required this.hint, this.prefixIcon, this.controller})
       : super(key: key);
 
   final Widget? prefixIcon;
   final String hint;
+  final TextEditingController? controller;
 
   @override
   State<TextFieldInput> createState() => _TextFieldInputState();
@@ -27,6 +29,7 @@ class _TextFieldInputState extends State<TextFieldInput> {
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.go,
+        controller: widget.controller,
         decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(

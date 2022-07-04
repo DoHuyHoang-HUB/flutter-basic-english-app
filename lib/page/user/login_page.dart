@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_english_app/config/routes/routes.dart';
 import 'package:flutter_english_app/config/theme/app_colors.dart';
@@ -6,7 +7,9 @@ import 'package:flutter_english_app/page/user/widgets/heading_title.dart';
 import 'package:flutter_english_app/page/user/widgets/password_field_input.dart';
 import 'package:flutter_english_app/page/user/widgets/social_auth_button.dart';
 import 'package:flutter_english_app/page/user/widgets/text_field_input.dart';
+import 'package:flutter_english_app/services/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,6 +19,58 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  String? errorMessage;
+
+  Future<void> signIn(String email, String password) async {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      try {
+        await FirebaseAuthService.signIn(email, password).then((value) => {
+              Fluttertoast.showToast(msg: "Login Successful").then((value) => {
+                    Navigator.pushReplacementNamed(
+                      context,
+                      Routes.dictionary_page,
+                    )
+                  })
+            });
+      } on FirebaseAuthException catch (error) {
+        switch (error.code) {
+          case "invalid-email":
+            errorMessage = "Your email address appears to be malformed.";
+
+            break;
+          case "wrong-password":
+            errorMessage = "Your password is wrong.";
+            break;
+          case "user-not-found":
+            errorMessage = "User with this email doesn't exist.";
+            break;
+          case "user-disabled":
+            errorMessage = "User with this email has been disabled.";
+            break;
+          case "too-many-requests":
+            errorMessage = "Too many requests";
+            break;
+          case "operation-not-allowed":
+            errorMessage = "Signing in with Email and Password is not enabled.";
+            break;
+          default:
+            errorMessage = "An undefined Error happened.";
+        }
+        Fluttertoast.showToast(msg: errorMessage!);
+      }
+    }
+  }
+
+  void loginWithGoogle(BuildContext context) {
+    FirebaseAuthService.signInWithGoogle().then((value) {
+      Navigator.pushNamed(context, Routes.dictionary_page);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,12 +94,14 @@ class _LoginPageState extends State<LoginPage> {
                   TextFieldInput(
                     hint: 'Enter your email',
                     prefixIcon: Image.asset('assets/images/user.png'),
+                    controller: _emailController,
                   ),
                   SizedBox(
                     height: 24.h,
                   ),
-                  const PasswordFieldInput(
+                  PasswordFieldInput(
                     hint: 'Enter your password',
+                    controller: _passwordController,
                   ),
                   SizedBox(
                     height: 18.h,
@@ -63,7 +120,13 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 40.h,
                   ),
-                  const AuthButton(textButton: 'Sign in'),
+                  AuthButton(
+                    textButton: 'Sign in',
+                    authentication: signIn(
+                      _emailController.text,
+                      _passwordController.text,
+                    ),
+                  ),
                   SizedBox(
                     height: 90.h,
                   ),
@@ -72,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       SocialAuthButton(
                         child: Image.asset('assets/images/google.png'),
+                        onTap: () => loginWithGoogle(context),
                       ),
                       SizedBox(
                         width: 30.w,
