@@ -26,15 +26,14 @@ class _LoginPageState extends State<LoginPage> {
   String? errorMessage;
 
   Future<void> signIn(String email, String password) async {
+    print("login");
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       try {
         await FirebaseAuthService.signIn(email, password).then((value) => {
-              Fluttertoast.showToast(msg: "Login Successful").then((value) => {
-                    Navigator.pushReplacementNamed(
-                      context,
-                      Routes.dictionary_page,
-                    )
-                  })
+              Navigator.pushReplacementNamed(
+                context,
+                Routes.dictionary_page,
+              )
             });
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
@@ -120,11 +119,14 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 40.h,
                   ),
-                  AuthButton(
-                    textButton: 'Sign in',
-                    authentication: signIn(
-                      _emailController.text,
-                      _passwordController.text,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: AuthButton(
+                      textButton: 'Sign in',
+                      authentication: signIn(
+                        _emailController.text,
+                        _passwordController.text,
+                      ),
                     ),
                   ),
                   SizedBox(

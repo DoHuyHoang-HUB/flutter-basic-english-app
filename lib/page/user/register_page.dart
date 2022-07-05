@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_english_app/config/routes/routes.dart';
 import 'package:flutter_english_app/config/theme/app_colors.dart';
+import 'package:flutter_english_app/page/user/widgets/auth_button.dart';
 import 'package:flutter_english_app/page/user/widgets/heading_title.dart';
 import 'package:flutter_english_app/page/user/widgets/password_field_input.dart';
 import 'package:flutter_english_app/page/user/widgets/social_auth_button.dart';
@@ -25,6 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String? errorMessage;
 
   Future<void> signUp(String email, String password) async {
+    print('Sign Up');
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       try {
         await FirebaseAuthService.signUpWithEmailAndPassword(email, password)
@@ -57,8 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
             errorMessage = "An undefined Error happened.";
         }
       }
-
-      Fluttertoast.showToast(msg: errorMessage!);
+      // Fluttertoast.showToast(msg: errorMessage!);
     }
   }
 
@@ -91,17 +92,25 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextFieldInput(
                     hint: 'Enter your email',
                     prefixIcon: Image.asset('assets/images/user.png'),
+                    controller: _emailController,
                   ),
                   SizedBox(
                     height: 24.h,
                   ),
-                  const PasswordFieldInput(
+                  PasswordFieldInput(
                     hint: 'Enter your password',
+                    controller: _passwordController,
                   ),
                   SizedBox(
                     height: 70.h,
                   ),
-                  // const AuthButton(textButton: 'Sign up', authentication: ,),
+                  AuthButton(
+                    textButton: 'Sign up',
+                    authentication: signUp(
+                      _emailController.text,
+                      _passwordController.text,
+                    ),
+                  ),
                   SizedBox(
                     height: 90.h,
                   ),
